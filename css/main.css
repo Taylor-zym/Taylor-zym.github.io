@@ -1111,6 +1111,8 @@ html[theme=dark] .token.inserted {
 }
 
 .sea-doc img {
+  display: block;
+  margin: 0 auto;
   border: 2px solid var(--sea-color-divider);
   -moz-border-radius: 1rem;
   -webkit-border-radius: 1rem;
