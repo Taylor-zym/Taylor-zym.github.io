@@ -1116,6 +1116,14 @@ html[theme=dark] .token.inserted {
   -webkit-border-radius: 1rem;
   border-radius: 1rem;
 }
+
+.sea-doc .MathJax_Display {
+  margin: 1.25rem 0 !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0.25rem;
+}
+
 .sea-page-card-wrapper {
   margin-bottom: 2rem;
 }
