@@ -1,3 +1,5 @@
+const MEDIA_DISPLAY_SCALE = 0.7;
+
 // 移动端菜单
 function onMobileNavShow() {
   const body = document.body;
@@ -67,12 +69,11 @@ function applyArticleImageScale(img) {
   const content = img.closest('.sea-article-content, .sea-doc');
   const contentWidth = content ? content.clientWidth : window.innerWidth;
   const maxDisplayRatio = window.innerWidth <= 768 ? 0.82 : 0.55;
-  const displayScale = 0.5;
   const baseWidth = Math.min(
     Math.round(img.naturalWidth * 0.3),
     Math.round(contentWidth * maxDisplayRatio)
   );
-  const targetWidth = Math.max(1, Math.round(baseWidth * displayScale));
+  const targetWidth = Math.max(1, Math.round(baseWidth * MEDIA_DISPLAY_SCALE));
 
   img.style.zoom = '1';
   img.style.width = `${targetWidth}px`;
@@ -84,13 +85,12 @@ function applyArticleVideoScale(video) {
   const content = video.closest('.sea-article-content, .sea-doc');
   const contentWidth = content ? content.clientWidth : window.innerWidth;
   const maxDisplayRatio = window.innerWidth <= 768 ? 0.82 : 0.55;
-  const displayScale = 0.5;
   const intrinsicWidth = video.videoWidth || contentWidth;
   const baseWidth = Math.min(
     Math.round(intrinsicWidth * 0.3),
     Math.round(contentWidth * maxDisplayRatio)
   );
-  const targetWidth = Math.max(1, Math.round(baseWidth * displayScale));
+  const targetWidth = Math.max(1, Math.round(baseWidth * MEDIA_DISPLAY_SCALE));
 
   video.style.width = `${targetWidth}px`;
   video.style.maxWidth = '100%';
