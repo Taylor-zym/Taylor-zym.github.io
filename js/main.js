@@ -22,4 +22,85 @@ function onMobileNavShow() {
   dimmer.addEventListener('click', closeFun);
   closeBtn.addEventListener('click', closeFun);
 }
+
+function createImageLightbox() {
+  let lightbox = document.getElementById('sea-image-lightbox');
+  if (lightbox) return lightbox;
+
+  lightbox = document.createElement('div');
+  lightbox.id = 'sea-image-lightbox';
+  lightbox.className = 'sea-image-lightbox';
+  lightbox.innerHTML = [
+    '<button type="button" class="sea-image-lightbox__close" aria-label="Close image preview">&times;</button>',
+    '<div class="sea-image-lightbox__inner">',
+    '  <img class="sea-image-lightbox__image" alt="">',
+    '</div>'
+  ].join('');
+
+  const closeBtn = lightbox.querySelector('.sea-image-lightbox__close');
+
+  const closeLightbox = () => {
+    lightbox.classList.remove('sea-image-lightbox--open');
+    document.body.classList.remove('sea-image-lightbox-on');
+  };
+
+  lightbox.addEventListener('click', function (e) {
+    if (e.target === lightbox || e.target === closeBtn) {
+      closeLightbox();
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && lightbox.classList.contains('sea-image-lightbox--open')) {
+      closeLightbox();
+    }
+  });
+
+  lightbox.closeLightbox = closeLightbox;
+  document.body.appendChild(lightbox);
+  return lightbox;
+}
+
+function applyArticleImageScale(img) {
+  if (!img.naturalWidth) return;
+
+  img.style.zoom = '1';
+  img.style.width = `${Math.round(img.naturalWidth * 0.3)}px`;
+  img.style.maxWidth = '100%';
+  img.style.height = 'auto';
+}
+
+function onArticleImagesReady() {
+  const images = document.querySelectorAll('.sea-doc img');
+  if (!images.length) return;
+
+  const lightbox = createImageLightbox();
+  const lightboxImage = lightbox.querySelector('.sea-image-lightbox__image');
+
+  images.forEach(function (img) {
+    const onImageLoad = function () {
+      applyArticleImageScale(img);
+    };
+
+    if (img.complete) {
+      onImageLoad();
+    } else {
+      img.addEventListener('load', onImageLoad, { once: true });
+    }
+
+    img.classList.add('sea-doc-image');
+
+    img.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      lightboxImage.src = img.currentSrc || img.src;
+      lightboxImage.alt = img.alt || '';
+      lightbox.classList.add('sea-image-lightbox--open');
+      document.body.classList.add('sea-image-lightbox-on');
+    });
+  });
+}
+
 onMobileNavShow();
+onArticleImagesReady();
