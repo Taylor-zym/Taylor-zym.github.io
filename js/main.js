@@ -80,6 +80,23 @@ function applyArticleImageScale(img) {
   img.style.height = 'auto';
 }
 
+function applyArticleVideoScale(video) {
+  const content = video.closest('.sea-article-content, .sea-doc');
+  const contentWidth = content ? content.clientWidth : window.innerWidth;
+  const maxDisplayRatio = window.innerWidth <= 768 ? 0.82 : 0.55;
+  const displayScale = 0.5;
+  const intrinsicWidth = video.videoWidth || contentWidth;
+  const baseWidth = Math.min(
+    Math.round(intrinsicWidth * 0.3),
+    Math.round(contentWidth * maxDisplayRatio)
+  );
+  const targetWidth = Math.max(1, Math.round(baseWidth * displayScale));
+
+  video.style.width = `${targetWidth}px`;
+  video.style.maxWidth = '100%';
+  video.style.height = 'auto';
+}
+
 function onArticleImagesReady() {
   const images = document.querySelectorAll('.sea-doc img');
   if (!images.length) return;
@@ -119,5 +136,31 @@ function onArticleImagesReady() {
   window.addEventListener('resize', rescaleImages);
 }
 
+function onArticleVideosReady() {
+  const videos = document.querySelectorAll('.sea-doc video');
+  if (!videos.length) return;
+
+  const rescaleVideos = function () {
+    videos.forEach(function (video) {
+      applyArticleVideoScale(video);
+    });
+  };
+
+  videos.forEach(function (video) {
+    const onVideoReady = function () {
+      applyArticleVideoScale(video);
+    };
+
+    if (video.readyState >= 1) {
+      onVideoReady();
+    } else {
+      video.addEventListener('loadedmetadata', onVideoReady, { once: true });
+    }
+  });
+
+  window.addEventListener('resize', rescaleVideos);
+}
+
 onMobileNavShow();
 onArticleImagesReady();
+onArticleVideosReady();
