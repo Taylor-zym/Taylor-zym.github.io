@@ -64,8 +64,16 @@ function createImageLightbox() {
 function applyArticleImageScale(img) {
   if (!img.naturalWidth) return;
 
+  const content = img.closest('.sea-article-content, .sea-doc');
+  const contentWidth = content ? content.clientWidth : window.innerWidth;
+  const maxDisplayRatio = window.innerWidth <= 768 ? 0.82 : 0.55;
+  const targetWidth = Math.min(
+    Math.round(img.naturalWidth * 0.3),
+    Math.round(contentWidth * maxDisplayRatio)
+  );
+
   img.style.zoom = '1';
-  img.style.width = `${Math.round(img.naturalWidth * 0.3)}px`;
+  img.style.width = `${targetWidth}px`;
   img.style.maxWidth = '100%';
   img.style.height = 'auto';
 }
@@ -76,6 +84,11 @@ function onArticleImagesReady() {
 
   const lightbox = createImageLightbox();
   const lightboxImage = lightbox.querySelector('.sea-image-lightbox__image');
+  const rescaleImages = function () {
+    images.forEach(function (img) {
+      applyArticleImageScale(img);
+    });
+  };
 
   images.forEach(function (img) {
     const onImageLoad = function () {
@@ -100,6 +113,8 @@ function onArticleImagesReady() {
       document.body.classList.add('sea-image-lightbox-on');
     });
   });
+
+  window.addEventListener('resize', rescaleImages);
 }
 
 onMobileNavShow();
