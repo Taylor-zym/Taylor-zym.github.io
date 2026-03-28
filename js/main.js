@@ -67,10 +67,12 @@ function applyArticleImageScale(img) {
   const content = img.closest('.sea-article-content, .sea-doc');
   const contentWidth = content ? content.clientWidth : window.innerWidth;
   const maxDisplayRatio = window.innerWidth <= 768 ? 0.82 : 0.55;
-  const targetWidth = Math.min(
+  const displayScale = 0.5;
+  const baseWidth = Math.min(
     Math.round(img.naturalWidth * 0.3),
     Math.round(contentWidth * maxDisplayRatio)
   );
+  const targetWidth = Math.max(1, Math.round(baseWidth * displayScale));
 
   img.style.zoom = '1';
   img.style.width = `${targetWidth}px`;
