@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>matrix_mp | 晴天会的</title>
+  <title>矩阵的MP逆&条件数 | 晴天会的</title>
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="keywords" content="">
@@ -14,21 +14,21 @@
     <link rel="shortcut icon" href="/logo.jpg">
   
 
-  <meta name="description" content="矩阵的MP逆MP逆的数学形式设矩阵 $A \in \mathbb{R}^{m\times n}$，若存在矩阵 $A^+ \in \mathbb{R}^{n\times m}$ 满足以下四个 Penrose 条件：  $AA^+A &#x3D; A$ $A^+AA^+ &#x3D; A^+$ $(AA^+)^T &#x3D; AA^+$ $(A^+A)^T &#x3D; A^+A$  则称 $A^+$ 为矩阵 $A$ 的 Moore—Pe">
+  <meta name="description" content="MP逆的数学形式设矩阵 $A \in \mathbb{R}^{m\times n}$，若存在矩阵 $A^+ \in \mathbb{R}^{n\times m}$ 满足以下四个 Penrose 条件：  $AA^+A &#x3D; A$ $A^+AA^+ &#x3D; A^+$ $(AA^+)^T &#x3D; AA^+$ $(A^+A)^T &#x3D; A^+A$  则称 $A^+$ 为矩阵 $A$ 的 Moore—Penrose">
 <meta property="og:type" content="article">
-<meta property="og:title" content="matrix_mp">
+<meta property="og:title" content="矩阵的MP逆&amp;条件数">
 <meta property="og:url" content="https://taylor-zym.github.io/2026/03/28/matrix-mp/index.html">
 <meta property="og:site_name" content="晴天会的">
-<meta property="og:description" content="矩阵的MP逆MP逆的数学形式设矩阵 $A \in \mathbb{R}^{m\times n}$，若存在矩阵 $A^+ \in \mathbb{R}^{n\times m}$ 满足以下四个 Penrose 条件：  $AA^+A &#x3D; A$ $A^+AA^+ &#x3D; A^+$ $(AA^+)^T &#x3D; AA^+$ $(A^+A)^T &#x3D; A^+A$  则称 $A^+$ 为矩阵 $A$ 的 Moore—Pe">
+<meta property="og:description" content="MP逆的数学形式设矩阵 $A \in \mathbb{R}^{m\times n}$，若存在矩阵 $A^+ \in \mathbb{R}^{n\times m}$ 满足以下四个 Penrose 条件：  $AA^+A &#x3D; A$ $A^+AA^+ &#x3D; A^+$ $(AA^+)^T &#x3D; AA^+$ $(A^+A)^T &#x3D; A^+A$  则称 $A^+$ 为矩阵 $A$ 的 Moore—Penrose">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-28T08:50:46.000Z">
-<meta property="article:modified_time" content="2026-03-28T08:52:07.144Z">
+<meta property="article:modified_time" content="2026-03-28T08:54:16.635Z">
 <meta property="article:author" content="Romtance">
 <meta property="article:tag" content="学习">
 <meta name="twitter:card" content="summary">
   <meta name="generator" content="Hexo 8.1.1">
   <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://taylor-zym.github.io/2026/03/28/matrix-mp/"},"headline":"matrix_mp","description":"矩阵的MP逆MP逆的数学形式设矩阵 $A \\in \\mathbb{R}^{m\\times n}$，若存在矩阵 $A^+ \\in \\mathbb{R}^{n\\times m}$ 满足以下四个 Penrose 条件： $AA^+A = A$ $A^+AA^+ = A^+$ $(AA^+)^T = AA^+$ $(A^+A)","datePublished":"2026-03-28T08:50:46.000Z","dateModified":"2026-03-28T08:52:07.144Z","author":{"@type":"Person","name":"Romtance"},"publisher":{"@type":"Organization","name":"晴天会的","logo":{"@type":"ImageObject","url":"https://taylor-zym.github.io/logo.jpg"}}}
+{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://taylor-zym.github.io/2026/03/28/matrix-mp/"},"headline":"矩阵的MP逆&条件数","description":"MP逆的数学形式设矩阵 $A \\in \\mathbb{R}^{m\\times n}$，若存在矩阵 $A^+ \\in \\mathbb{R}^{n\\times m}$ 满足以下四个 Penrose 条件： $AA^+A = A$ $A^+AA^+ = A^+$ $(AA^+)^T = AA^+$ $(A^+A)^T = A","datePublished":"2026-03-28T08:50:46.000Z","dateModified":"2026-03-28T08:54:16.635Z","author":{"@type":"Person","name":"Romtance"},"publisher":{"@type":"Organization","name":"晴天会的","logo":{"@type":"ImageObject","url":"https://taylor-zym.github.io/logo.jpg"}}}
 </script>
 
   
@@ -106,7 +106,7 @@
   <main id="sea-main-wrapper" data-pagefind-body>
     <article class="sea-page-card-wrapper">
   <header class="sea-article-header">
-    <h1 class="sea-article-title">matrix_mp</h1>
+    <h1 class="sea-article-title">矩阵的MP逆&条件数</h1>
     
       <div class="sea-post-meta sea-post-meta__center">
         <div class="sea-post-time">
@@ -132,7 +132,7 @@
   <div class="sea-doc">
     
     <div class="sea-article-content">
-      <h1 id="矩阵的MP逆"><a href="#矩阵的MP逆" class="headerlink" title="矩阵的MP逆"></a>矩阵的MP逆</h1><h2 id="MP逆的数学形式"><a href="#MP逆的数学形式" class="headerlink" title="MP逆的数学形式"></a>MP逆的数学形式</h2><p>设矩阵 $A \in \mathbb{R}^{m\times n}$，若存在矩阵 $A^+ \in \mathbb{R}^{n\times m}$ 满足以下四个 Penrose 条件：</p>
+      <h2 id="MP逆的数学形式"><a href="#MP逆的数学形式" class="headerlink" title="MP逆的数学形式"></a>MP逆的数学形式</h2><p>设矩阵 $A \in \mathbb{R}^{m\times n}$，若存在矩阵 $A^+ \in \mathbb{R}^{n\times m}$ 满足以下四个 Penrose 条件：</p>
 <ol>
 <li>$AA^+A = A$</li>
 <li>$A^+AA^+ = A^+$</li>
@@ -253,6 +253,26 @@ A^+ = V\Sigma^+ U^T.</script><p>如果矩阵存在很小的非零奇异值，则
 </footer>
 
   
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      showMathMenu: false,
+      messageStyle: 'none',
+      tex2jax: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {
+        extensions: ['AMSmath.js', 'AMSsymbols.js'],
+        equationNumbers: {
+          autoNumber: 'AMS'
+        }
+      }
+    });
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML"></script>
 
 
 
