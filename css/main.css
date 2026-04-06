@@ -1107,12 +1107,14 @@ html[theme=dark] .token.inserted {
 
 .sea-doc img,
 .sea-doc video {
-  max-width: 100%
+  max-width: 100%;
+  height: auto;
 }
 
 .sea-doc img {
   display: block;
-  margin: 0 auto;
+  width: auto;
+  margin: 1rem auto;
   cursor: zoom-in;
   border: 2px solid var(--sea-color-divider);
   -moz-border-radius: 1rem;
@@ -1210,6 +1212,8 @@ html[theme=dark] .token.inserted {
   overflow-y: hidden;
   padding-bottom: 0.25rem;
 }
+
+
 
 .sea-page-card-wrapper {
   margin-bottom: 2rem;

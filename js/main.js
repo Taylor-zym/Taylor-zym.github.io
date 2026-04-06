@@ -1,4 +1,8 @@
-const MEDIA_DISPLAY_SCALE = 0.7;
+const MOBILE_MEDIA_BREAKPOINT = 768;
+const MEDIA_MOBILE_MAX_RATIO = 1;
+const MEDIA_DESKTOP_MAX_RATIO = 0.92;
+const MEDIA_MOBILE_VIEWPORT_PADDING_RATIO = 0.96;
+const MEDIA_DESKTOP_VIEWPORT_PADDING_RATIO = 0.9;
 
 // 移动端菜单
 function onMobileNavShow() {
@@ -63,36 +67,44 @@ function createImageLightbox() {
   return lightbox;
 }
 
+function resolveMediaContainerWidth(element) {
+  const content = element.closest('.sea-article-content, .sea-doc');
+  return content ? content.clientWidth : window.innerWidth;
+}
+
+function getAdaptiveMediaWidth(intrinsicWidth, containerWidth) {
+  const isMobile = window.innerWidth <= MOBILE_MEDIA_BREAKPOINT;
+  const ratioByDevice = isMobile ? MEDIA_MOBILE_MAX_RATIO : MEDIA_DESKTOP_MAX_RATIO;
+  const viewportRatio = isMobile
+    ? MEDIA_MOBILE_VIEWPORT_PADDING_RATIO
+    : MEDIA_DESKTOP_VIEWPORT_PADDING_RATIO;
+  const widthByContainer = Math.round(containerWidth * ratioByDevice);
+  const widthByViewport = Math.round(window.innerWidth * viewportRatio);
+  const maxWidth = Math.max(1, Math.min(widthByContainer, widthByViewport));
+
+  if (!intrinsicWidth || intrinsicWidth <= 0) {
+    return maxWidth;
+  }
+
+  return Math.max(1, Math.min(Math.round(intrinsicWidth), maxWidth));
+}
+
 function applyArticleImageScale(img) {
-  if (!img.naturalWidth) return;
+  const contentWidth = resolveMediaContainerWidth(img);
+  const targetWidth = getAdaptiveMediaWidth(img.naturalWidth, contentWidth);
 
-  const content = img.closest('.sea-article-content, .sea-doc');
-  const contentWidth = content ? content.clientWidth : window.innerWidth;
-  const maxDisplayRatio = window.innerWidth <= 768 ? 0.82 : 0.55;
-  const baseWidth = Math.min(
-    Math.round(img.naturalWidth * 0.3),
-    Math.round(contentWidth * maxDisplayRatio)
-  );
-  const targetWidth = Math.max(1, Math.round(baseWidth * MEDIA_DISPLAY_SCALE));
-
-  img.style.zoom = '1';
-  img.style.width = `${targetWidth}px`;
+  img.style.removeProperty('zoom');
+  img.style.width = targetWidth + 'px';
   img.style.maxWidth = '100%';
   img.style.height = 'auto';
 }
 
 function applyArticleVideoScale(video) {
-  const content = video.closest('.sea-article-content, .sea-doc');
-  const contentWidth = content ? content.clientWidth : window.innerWidth;
-  const maxDisplayRatio = window.innerWidth <= 768 ? 0.82 : 0.55;
-  const intrinsicWidth = video.videoWidth || contentWidth;
-  const baseWidth = Math.min(
-    Math.round(intrinsicWidth * 0.3),
-    Math.round(contentWidth * maxDisplayRatio)
-  );
-  const targetWidth = Math.max(1, Math.round(baseWidth * MEDIA_DISPLAY_SCALE));
+  const contentWidth = resolveMediaContainerWidth(video);
+  const intrinsicWidth = video.videoWidth || 0;
+  const targetWidth = getAdaptiveMediaWidth(intrinsicWidth, contentWidth);
 
-  video.style.width = `${targetWidth}px`;
+  video.style.width = targetWidth + 'px';
   video.style.maxWidth = '100%';
   video.style.height = 'auto';
 }
@@ -164,3 +176,11 @@ function onArticleVideosReady() {
 onMobileNavShow();
 onArticleImagesReady();
 onArticleVideosReady();
+
+
+
+
+
+
+
+
