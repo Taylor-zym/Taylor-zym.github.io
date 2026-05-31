@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Claude常见指令 | 晴天会的</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords" content="">
+  <meta name="theme-color" content="#10b981">
+
+  <link rel="canonical" href="https://taylor-zym.github.io/2026/05/31/Claude-dangerous-start/">
+
+  
+    <link rel="shortcut icon" href="/logo.jpg">
+  
+
+  <meta name="description" content="1. 最常用启动命令避免每次都需要点击允许：Claude --dangerously-skip-permissions      命令 用途     claude 启动 Claude Code 交互式会话   claude -p &quot;你的问题&quot; 非交互模式，执行一次后退出，适合脚本&#x2F;CI   claude --help 查看 CLI 参数帮助   claude --version">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude常见指令">
+<meta property="og:url" content="https://taylor-zym.github.io/2026/05/31/Claude-dangerous-start/index.html">
+<meta property="og:site_name" content="晴天会的">
+<meta property="og:description" content="1. 最常用启动命令避免每次都需要点击允许：Claude --dangerously-skip-permissions      命令 用途     claude 启动 Claude Code 交互式会话   claude -p &quot;你的问题&quot; 非交互模式，执行一次后退出，适合脚本&#x2F;CI   claude --help 查看 CLI 参数帮助   claude --version">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://taylor-zym.github.io/2026/05/31/Claude-dangerous-start/image-20260531162141390.png">
+<meta property="article:published_time" content="2026-05-31T08:04:05.000Z">
+<meta property="article:modified_time" content="2026-05-31T08:21:59.870Z">
+<meta property="article:author" content="Romtance">
+<meta property="article:tag" content="学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://taylor-zym.github.io/2026/05/31/Claude-dangerous-start/image-20260531162141390.png">
+  <meta name="generator" content="Hexo 8.1.1">
+  <script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://taylor-zym.github.io/2026/05/31/Claude-dangerous-start/"},"headline":"Claude常见指令","description":"1. 最常用启动命令避免每次都需要点击允许：Claude --dangerously-skip-permissions 命令 用途 claude 启动 Claude Code 交互式会话 claude -p &quot;你的问题&quot; 非交互模式，执行一次后退出，适合脚本/CI claude --help 查看 ","datePublished":"2026-05-31T08:04:05.000Z","dateModified":"2026-05-31T08:21:59.870Z","author":{"@type":"Person","name":"Romtance"},"publisher":{"@type":"Organization","name":"晴天会的","logo":{"@type":"ImageObject","url":"https://taylor-zym.github.io/logo.jpg"}}}
+</script>
+
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  <style>
+    :root {
+      --sea-color-primary: #10b981;
+      
+    }
+  </style>
+
+  
+<script src="/js/theme_mode.js"></script>
+
+</head>
+<body>
+  <header class="sea-header">
+    <nav class="sea-nav-wrap">
+  <div class="sea-nav-logo" title="">
+    <a href="/">晴天会的</a>
+  </div>
+  <div class="sea-nav-menus">
+    <div id="sea-nav-toggle">
+      <svg t="1716965724278" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10878" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M950.857143 768v73.142857c0 20.004571-16.566857 36.571429-36.571429 36.571429H109.714286c-20.004571 0-36.571429-16.566857-36.571429-36.571429v-73.142857c0-20.004571 16.566857-36.571429 36.571429-36.571429h804.571428c20.004571 0 36.571429 16.566857 36.571429 36.571429z m0-292.571429v73.142858c0 20.004571-16.566857 36.571429-36.571429 36.571428H109.714286c-20.004571 0-36.571429-16.566857-36.571429-36.571428v-73.142858c0-20.004571 16.566857-36.571429 36.571429-36.571428h804.571428c20.004571 0 36.571429 16.566857 36.571429 36.571428z m0-292.571428v73.142857c0 20.004571-16.566857 36.571429-36.571429 36.571429H109.714286c-20.004571 0-36.571429-16.566857-36.571429-36.571429V182.857143c0-20.004571 16.566857-36.571429 36.571429-36.571429h804.571428c20.004571 0 36.571429 16.566857 36.571429 36.571429z" p-id="10879"></path></svg>
+    </div>
+
+    <div id="sea-nav-dimmer"></div>
+<div class="sea-menu-wrap">
+  
+    <a
+      class="sea-menu-link "
+      
+      href="/archives/"
+    >
+      归档
+    </a>
+  
+    <a
+      class="sea-menu-link "
+      
+      href="/categories/"
+    >
+      分类
+    </a>
+  
+    <a
+      class="sea-menu-link "
+      
+      href="/about/"
+    >
+      关于
+    </a>
+  
+
+  <span class="sea-menu-sep">|</span>
+
+  
+
+  <span class="sea-menu-icon" id="sea-theme-dark">
+    <svg t="1725413107294" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10118" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M557.553778 976.355556c-257.265778 0-466.56-207.160889-466.56-464.426667 0-253.923556 206.577778-464.284444 460.501333-464.284445h0.355556c10.766222 0 20.622222 3.953778 25.443555 13.610667 4.878222 9.756444 3.740444 20.394667-2.915555 29.027556-55.722667 72.220444-85.162667 158.108444-85.162667 249.372444 0 225.891556 183.779556 409.386667 409.671111 409.386667l5.248-0.256c10.325333-0.142222 20.977778 5.859556 25.841778 15.644444a28.302222 28.302222 0 0 1-2.915556 30.051556C837.902222 910.08 703.203556 976.355556 557.553778 976.355556zM495.274667 105.016889C299.192889 135.281778 147.882667 306.161778 147.882667 509.809778c0 225.877333 183.779556 409.656889 409.671111 409.656889 108.686222 0 210.403556-42.055111 286.577778-116.977778-231.566222-27.192889-411.804444-224.625778-411.804445-463.36 0-83.427556 21.617778-163.299556 62.947556-234.112z" fill="" p-id="10119"></path><path d="M578.830222 879.132444c-186.865778 0-345.784889-133.418667-377.841778-317.269333a14.222222 14.222222 0 1 1 28.017778-4.878222c29.681778 170.183111 176.810667 293.703111 349.824 293.703111a14.222222 14.222222 0 1 1 0 28.444444zM209.991111 531.2c-7.537778 0-13.838222-6.997333-14.193778-14.606222-0.312889-6.584889-0.483556-13.795556-0.483555-20.465778 0-7.864889 6.357333-14.492444 14.222222-14.492444s14.222222 6.229333 14.222222 14.094222c0 6.229333 0.170667 13.425778 0.455111 19.584 0.369778 7.850667-5.674667 15.886222-13.525333 15.886222h-0.696889z" fill="" p-id="10120"></path><path d="M622.350222 309.930667m-25.344 0a25.344 25.344 0 1 0 50.688 0 25.344 25.344 0 1 0-50.688 0Z" fill="" p-id="10121"></path><path d="M787.072 188.273778m-25.344 0a25.344 25.344 0 1 0 50.688 0 25.344 25.344 0 1 0-50.688 0Z" fill="" p-id="10122"></path><path d="M731.960889 415.303111m-25.344 0a25.344 25.344 0 1 0 50.688 0 25.344 25.344 0 1 0-50.688 0Z" p-id="10123"></path></svg>
+  </span>
+  <span class="sea-menu-icon" id="sea-theme-light">
+    <svg t="1725410359322" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4274" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M512 768c-141.376 0-256-114.624-256-256s114.624-256 256-256 256 114.624 256 256-114.624 256-256 256z m0-85.333333a170.666667 170.666667 0 1 0 0-341.333334 170.666667 170.666667 0 0 0 0 341.333334zM469.333333 85.333333a42.666667 42.666667 0 1 1 85.333334 0v85.333334a42.666667 42.666667 0 1 1-85.333334 0V85.333333z m0 768a42.666667 42.666667 0 1 1 85.333334 0v85.333334a42.666667 42.666667 0 1 1-85.333334 0v-85.333334zM85.333333 554.666667a42.666667 42.666667 0 1 1 0-85.333334h85.333334a42.666667 42.666667 0 1 1 0 85.333334H85.333333z m768 0a42.666667 42.666667 0 1 1 0-85.333334h85.333334a42.666667 42.666667 0 1 1 0 85.333334h-85.333334zM161.834667 222.165333a42.666667 42.666667 0 0 1 60.330666-60.330666l64 64a42.666667 42.666667 0 0 1-60.330666 60.330666l-64-64z m576 576a42.666667 42.666667 0 0 1 60.330666-60.330666l64 64a42.666667 42.666667 0 0 1-60.330666 60.330666l-64-64z m-515.669334 64a42.666667 42.666667 0 0 1-60.330666-60.330666l64-64a42.666667 42.666667 0 0 1 60.330666 60.330666l-64 64z m576-576a42.666667 42.666667 0 0 1-60.330666-60.330666l64-64a42.666667 42.666667 0 0 1 60.330666 60.330666l-64 64z" p-id="4275"></path></svg>
+  </span>
+
+  <span id="sea-menu-close-icon">
+    <svg t="1725435896874" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4408" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M556.8 512l265.6-265.6c12.8-12.8 12.8-32 0-44.8s-32-12.8-44.8 0L512 467.2 246.4 201.6c-12.8-12.8-32-12.8-44.8 0s-12.8 32 0 44.8l265.6 265.6-265.6 265.6c-12.8 12.8-12.8 32 0 44.8 6.4 6.4 12.8 9.6 22.4 9.6s16-3.2 22.4-9.6l265.6-265.6 265.6 265.6c6.4 6.4 16 9.6 22.4 9.6s16-3.2 22.4-9.6c12.8-12.8 12.8-32 0-44.8L556.8 512z" p-id="4409"></path></svg>
+  </span>
+</div>
+  </div>
+</nav>
+  </header>
+  <main id="sea-main-wrapper" data-pagefind-body>
+    <article class="sea-page-card-wrapper">
+  <header class="sea-article-header">
+    <h1 class="sea-article-title">Claude常见指令</h1>
+    
+      <div class="sea-post-meta sea-post-meta__center">
+        <div class="sea-post-time">
+  <svg t="1716964550804" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2621" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M805.49888 981.49888l-602.3168-0.76288c-86.59456-8.192-154.56768-81.3056-154.56768-170.01472L48.6144 291.73248c0-94.1568 76.60032-170.75712 170.7776-170.75712l586.10176 0c94.1568 0 170.73152 76.60032 170.73152 170.75712L976.22528 810.7008C976.2304 904.87296 899.63008 981.49888 805.49888 981.49888L805.49888 981.49888zM219.3664 190.57152c-55.79776 0-101.20192 45.38368-101.20192 101.18144l0 518.96832c0 55.79776 45.40416 101.20704 101.20192 101.20704l586.13248 0c55.77728 0 101.16096-45.40928 101.16096-101.20704L906.65984 291.73248c0-55.79776-45.38368-101.18656-101.16096-101.18656L219.3664 190.54592 219.3664 190.57152zM698.84416 290.51904c-25.60512 0-46.38208-20.77696-46.38208-46.38208l0-158.6688c0-25.6 20.77696-46.38208 46.38208-46.38208 25.6 0 46.38208 20.78208 46.38208 46.38208L745.22624 244.1216C745.22624 269.7472 724.46976 290.51904 698.84416 290.51904L698.84416 290.51904zM315.65824 290.51904c-25.60512 0-46.38208-20.77696-46.38208-46.38208l0-158.6688c0-25.6 20.77696-46.38208 46.38208-46.38208 25.6 0 46.38208 20.78208 46.38208 46.38208L362.04032 244.1216C362.04032 269.7472 341.28896 290.51904 315.65824 290.51904L315.65824 290.51904zM534.8864 794.78784l-44.27264 0c-25.6 0-46.38208-20.77696-46.38208-46.38208 0-25.6 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.78208 46.38208 46.38208C581.26848 774.01088 560.4864 794.78784 534.8864 794.78784L534.8864 794.78784zM930.79552 452.608 121.24672 452.608c-25.60512 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.77696-46.38208 46.38208-46.38208l809.5744 0c25.6 0 46.38208 20.77696 46.38208 46.38208C977.2032 431.82592 956.42624 452.608 930.79552 452.608L930.79552 452.608zM327.92576 649.03168l-44.27264 0c-25.6 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.77696 46.38208 46.38208C374.30784 628.25472 353.52576 649.03168 327.92576 649.03168L327.92576 649.03168zM534.8864 649.03168l-44.27264 0c-25.6 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.77696 46.38208 46.38208S560.4864 649.03168 534.8864 649.03168L534.8864 649.03168zM741.27872 649.03168l-44.26752 0c-25.60512 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.77696-46.38208 46.38208-46.38208l44.26752 0c25.60512 0 46.38208 20.77696 46.38208 46.38208C787.6608 628.25472 766.90944 649.03168 741.27872 649.03168L741.27872 649.03168zM327.92576 794.78784l-44.27264 0c-25.6 0-46.38208-20.77696-46.38208-46.38208 0-25.6 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.78208 46.38208 46.38208C374.30784 774.01088 353.52576 794.78784 327.92576 794.78784L327.92576 794.78784zM741.27872 794.78784l-44.26752 0c-25.60512 0-46.38208-20.77696-46.38208-46.38208 0-25.6 20.77696-46.38208 46.38208-46.38208l44.26752 0c25.60512 0 46.38208 20.78208 46.38208 46.38208C787.6608 774.01088 766.90944 794.78784 741.27872 794.78784L741.27872 794.78784z" p-id="2622"></path></svg>
+  <time datetime="2026-05-31T08:04:05.000Z">2026-05-31</time>
+</div>
+        
+  <div class="sea-post-categories">
+    <svg t="1716964680422" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4550" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M810.666667 85.333333a85.333333 85.333333 0 0 1 85.333333 85.333334v152.021333c36.821333 9.493333 64 42.88 64 82.645333v405.333334a128 128 0 0 1-128 128H192a128 128 0 0 1-128-128V298.666667a85.376 85.376 0 0 1 64-82.645334V170.666667a85.333333 85.333333 0 0 1 85.333333-85.333334h597.333334zM128.149333 296.170667L128 298.666667v512a64 64 0 0 0 60.245333 63.893333L192 874.666667h640a64 64 0 0 0 63.893333-60.245334L896 810.666667V405.333333a21.333333 21.333333 0 0 0-18.837333-21.184L874.666667 384H638.165333l-122.069333-101.717333a21.333333 21.333333 0 0 0-10.688-4.736l-2.986667-0.213334H149.333333a21.333333 21.333333 0 0 0-21.184 18.837334zM535.189333 213.333333l127.978667 106.666667H832V170.666667a21.333333 21.333333 0 0 0-18.837333-21.184L810.666667 149.333333H213.333333a21.333333 21.333333 0 0 0-21.184 18.837334L192 170.666667v42.666666h343.168z" p-id="4551"></path></svg>
+    <a class="category-link" href="/categories/AI/">AI</a>
+  </div>
+
+        
+  <div class="sea-post-tags">
+    <svg t="1716964811431" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6117" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M384 977.152c-20.5312 0-39.8336-7.9872-54.3232-22.4256l-260.4032-260.4032c-14.4896-14.4896-22.4256-33.7408-22.4256-54.3232s7.9872-39.8336 22.4256-54.3232l439.6032-439.6032c24.9344-24.9344 70.2464-43.7248 105.5232-43.7248h230.4c42.3424 0 76.8 34.4576 76.8 76.8v230.4c0 35.2256-18.7904 80.5888-43.6736 105.5232l-439.6032 439.6032a76.1856 76.1856 0 0 1-54.3232 22.4256zM614.4 153.6c-21.248 0-54.272 13.6704-69.2736 28.7232l-439.6032 439.6032c-4.8128 4.8128-7.424 11.2128-7.424 18.1248s2.6624 13.312 7.424 18.0736l260.4032 260.4032c4.8128 4.8128 11.2128 7.424 18.1248 7.424s13.312-2.6624 18.1248-7.424l439.6032-439.6032c15.0016-15.0016 28.7232-48.0768 28.7232-69.3248V179.2a25.6 25.6 0 0 0-25.6-25.6h-230.4z" p-id="6118"></path><path d="M742.4 358.4c-42.3424 0-76.8-34.4576-76.8-76.8S700.0576 204.8 742.4 204.8s76.8 34.4576 76.8 76.8S784.7424 358.4 742.4 358.4z m0-102.4a25.6 25.6 0 1 0 0 51.2 25.6 25.6 0 0 0 0-51.2z" p-id="6119"></path></svg>
+    <a class="tag-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a>
+  </div>
+
+        
+      </div>
+    
+  </header>
+  <div class="sea-doc">
+    
+    <div class="sea-article-content">
+      <h2 id="1-最常用启动命令"><a href="#1-最常用启动命令" class="headerlink" title="1. 最常用启动命令"></a>1. 最常用启动命令</h2><p>避免每次都需要点击允许：<code>Claude --dangerously-skip-permissions</code></p>
+<p><img src="/2026/05/31/Claude-dangerous-start/image-20260531162141390.png" alt="image-20260531162141390"></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>claude</code></td>
+<td>启动 Claude Code 交互式会话</td>
+</tr>
+<tr>
+<td><code>claude -p &quot;你的问题&quot;</code></td>
+<td>非交互模式，执行一次后退出，适合脚本/CI</td>
+</tr>
+<tr>
+<td><code>claude --help</code></td>
+<td>查看 CLI 参数帮助</td>
+</tr>
+<tr>
+<td><code>claude --version</code></td>
+<td>查看当前 Claude Code 版本</td>
+</tr>
+<tr>
+<td><code>claude -c</code> / <code>claude --continue</code></td>
+<td>继续最近一次会话</td>
+</tr>
+<tr>
+<td><code>claude -r</code> / <code>claude --resume</code></td>
+<td>从历史会话中恢复</td>
+</tr>
+<tr>
+<td><code>claude --model &lt;model&gt;</code></td>
+<td>指定启动模型</td>
+</tr>
+<tr>
+<td><code>claude --add-dir &lt;path&gt;</code></td>
+<td>额外加入可访问目录</td>
+</tr>
+<tr>
+<td><code>claude --allowedTools &lt;tools&gt;</code></td>
+<td>限制允许使用的工具</td>
+</tr>
+<tr>
+<td><code>claude --max-turns &lt;n&gt;</code></td>
+<td>限制自动执行轮数，防止任务跑飞</td>
+</tr>
+<tr>
+<td><code>claude --output-format json</code></td>
+<td>结构化输出，适合脚本集成</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>示例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">claude</span><br><span class="line">claude -p <span class="string">&quot;总结这个仓库的架构&quot;</span></span><br><span class="line">claude -p <span class="string">&quot;检查 src 目录中的潜在 bug&quot;</span> --output-format json</span><br><span class="line">claude --model opus</span><br><span class="line">claude --add-dir ../shared</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="2-会话管理类-Slash-Commands"><a href="#2-会话管理类-Slash-Commands" class="headerlink" title="2. 会话管理类 Slash Commands"></a>2. 会话管理类 Slash Commands</h2><p>在 Claude Code 交互界面中输入 <code>/</code> 可以查看所有可用命令。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>用途</th>
+<th>常见场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/help</code></td>
+<td>查看所有可用命令</td>
+<td>不确定命令名时</td>
+</tr>
+<tr>
+<td><code>/clear</code></td>
+<td>清空当前上下文，开始新任务</td>
+<td>切换到完全无关的新任务</td>
+</tr>
+<tr>
+<td><code>/compact</code></td>
+<td>压缩上下文，保留关键信息</td>
+<td>长会话上下文快满时</td>
+</tr>
+<tr>
+<td><code>/context</code></td>
+<td>查看上下文使用情况</td>
+<td>判断是否需要 compact</td>
+</tr>
+<tr>
+<td><code>/resume</code></td>
+<td>恢复历史会话</td>
+<td>回到之前的任务</td>
+</tr>
+<tr>
+<td><code>/rename</code></td>
+<td>给当前会话命名</td>
+<td>方便之后恢复</td>
+</tr>
+<tr>
+<td><code>/fork</code></td>
+<td>从当前会话分叉出新路线</td>
+<td>想尝试另一种实现方案</td>
+</tr>
+<tr>
+<td><code>/rewind</code></td>
+<td>回滚到之前状态</td>
+<td>改坏代码或想撤回某轮操作</td>
+</tr>
+<tr>
+<td><code>/export</code></td>
+<td>导出当前对话</td>
+<td>保存记录或分享给别人</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>建议习惯：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">任务切换 → /clear</span><br><span class="line">上下文过大 → /compact</span><br><span class="line">做大改动前 → /fork 或 /plan</span><br><span class="line">提交前 → /diff</span><br><span class="line">改坏了 → /rewind</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="3-模型、配置与状态"><a href="#3-模型、配置与状态" class="headerlink" title="3. 模型、配置与状态"></a>3. 模型、配置与状态</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/model</code></td>
+<td>切换当前会话使用的模型</td>
+</tr>
+<tr>
+<td><code>/status</code></td>
+<td>查看当前模型、账号、版本、连接状态等</td>
+</tr>
+<tr>
+<td><code>/config</code></td>
+<td>打开配置界面</td>
+</tr>
+<tr>
+<td><code>/doctor</code></td>
+<td>诊断 Claude Code 安装和环境问题</td>
+</tr>
+<tr>
+<td><code>/release-notes</code></td>
+<td>查看更新日志</td>
+</tr>
+<tr>
+<td><code>/usage</code></td>
+<td>查看套餐、额度、速率限制等</td>
+</tr>
+<tr>
+<td><code>/cost</code></td>
+<td>查看当前会话成本，API 用户常用</td>
+</tr>
+<tr>
+<td><code>/stats</code></td>
+<td>查看使用统计，Pro/Max 用户常用</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>常用建议：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">复杂架构/疑难 bug → 用 Opus</span><br><span class="line">普通代码阅读/小修复 → 用 Sonnet 或默认模型</span><br><span class="line">额度紧张 → /usage</span><br><span class="line">上下文紧张 → /context + /compact</span><br><span class="line">环境异常 → /doctor</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="4-项目初始化与记忆"><a href="#4-项目初始化与记忆" class="headerlink" title="4. 项目初始化与记忆"></a>4. 项目初始化与记忆</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/init</code></td>
+<td>分析当前项目并生成 <code>CLAUDE.md</code></td>
+</tr>
+<tr>
+<td><code>/memory</code></td>
+<td>编辑/管理项目记忆和规则</td>
+</tr>
+<tr>
+<td><code>/permissions</code></td>
+<td>管理权限策略</td>
+</tr>
+<tr>
+<td><code>/allowed-tools</code></td>
+<td>管理允许使用的工具</td>
+</tr>
+<tr>
+<td><code>/hooks</code></td>
+<td>配置工具调用前后的自动化 hook</td>
+</tr>
+<tr>
+<td><code>/agents</code></td>
+<td>管理子代理/subagents</td>
+</tr>
+<tr>
+<td><code>/mcp</code></td>
+<td>管理 MCP 服务器和外部工具集成</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>推荐首次进入项目时执行：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/init</span><br></pre></td></tr></table></figure>
+<p>它通常会生成或更新项目级 <code>CLAUDE.md</code>，让 Claude Code 记住项目结构、测试命令、代码规范等。</p>
+<hr>
+<h2 id="5-代码查看、修改与质量检查"><a href="#5-代码查看、修改与质量检查" class="headerlink" title="5. 代码查看、修改与质量检查"></a>5. 代码查看、修改与质量检查</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/diff</code></td>
+<td>查看本轮会话产生的代码 diff</td>
+</tr>
+<tr>
+<td><code>/review</code></td>
+<td>代码审查，具体可用性取决于环境/技能配置</td>
+</tr>
+<tr>
+<td><code>/security-review</code></td>
+<td>安全审查，适合认证、权限、数据处理相关改动</td>
+</tr>
+<tr>
+<td><code>/simplify</code></td>
+<td>查找可简化、可复用、低效或过度复杂的代码</td>
+</tr>
+<tr>
+<td><code>/plan</code></td>
+<td>进入计划模式，只分析和规划，不直接改代码</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>高频工作流：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. /plan</span><br><span class="line">2. 让 Claude 分析改动方案</span><br><span class="line">3. 批准后实现</span><br><span class="line">4. /diff</span><br><span class="line">5. 运行测试</span><br><span class="line">6. /security-review 或 /review</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="6-输入技巧"><a href="#6-输入技巧" class="headerlink" title="6. 输入技巧"></a>6. 输入技巧</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>输入方式</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@文件路径</code></td>
+<td>直接引用文件</td>
+</tr>
+<tr>
+<td><code>@目录路径</code></td>
+<td>引用目录上下文</td>
+</tr>
+<tr>
+<td><code>!命令</code></td>
+<td>直接在当前会话中运行 shell 命令</td>
+</tr>
+<tr>
+<td>粘贴图片</td>
+<td>让 Claude 分析截图、UI、报错图</td>
+</tr>
+<tr>
+<td>拖入文件/路径</td>
+<td>快速给 Claude 上下文</td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td>打开 slash command 列表</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>示例：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@src/auth/login.ts 解释这个登录流程</span><br><span class="line">@README.md 根据文档帮我检查安装步骤</span><br><span class="line">! git status</span><br><span class="line">! npm test</span><br></pre></td></tr></table></figure>
+<p>注意：<code>!</code> 前缀会直接执行命令，并把输出带回对话上下文。</p>
+<hr>
+<h2 id="7-常用快捷键"><a href="#7-常用快捷键" class="headerlink" title="7. 常用快捷键"></a>7. 常用快捷键</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Shift + Tab</code></td>
+<td>切换权限/模式，例如普通模式、自动接受、计划模式</td>
+</tr>
+<tr>
+<td><code>Esc</code> <code>Esc</code></td>
+<td>打开 rewind/回滚菜单</td>
+</tr>
+<tr>
+<td><code>Ctrl + C</code></td>
+<td>中断当前操作</td>
+</tr>
+<tr>
+<td><code>Ctrl + D</code></td>
+<td>退出 Claude Code</td>
+</tr>
+<tr>
+<td><code>Ctrl + R</code></td>
+<td>搜索历史输入</td>
+</tr>
+<tr>
+<td><code>Ctrl + G</code></td>
+<td>打开外部编辑器编辑长 prompt，具体取决于终端支持</td>
+</tr>
+<tr>
+<td><code>Tab</code></td>
+<td>补全路径、命令或切换某些输入模式</td>
+</tr>
+<tr>
+<td><code>↑ / ↓</code></td>
+<td>浏览历史输入</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>不同终端、系统、版本下快捷键可能略有差异，建议用：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/help</span><br><span class="line">/terminal-setup</span><br></pre></td></tr></table></figure>
+<p>查看并配置当前环境支持情况。</p>
+<hr>
+<h2 id="8-权限模式常见理解"><a href="#8-权限模式常见理解" class="headerlink" title="8. 权限模式常见理解"></a>8. 权限模式常见理解</h2><p>Claude Code 通常会根据当前权限模式决定是否能自动读写文件、运行命令。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>普通模式</td>
+<td>重要操作前通常会询问</td>
+</tr>
+<tr>
+<td>Plan Mode</td>
+<td>只读分析，不直接改代码</td>
+</tr>
+<tr>
+<td>Auto-Accept / Accept Edits</td>
+<td>对部分编辑操作自动接受</td>
+</tr>
+<tr>
+<td>更高权限模式</td>
+<td>可能允许更多命令或文件操作，需谨慎使用</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>建议：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">陌生项目 / 生产代码 / 大规模重构 → 先用 Plan Mode</span><br><span class="line">小修复 / 熟悉项目 → 可使用普通模式</span><br><span class="line">高风险命令 / 删除文件 / 部署 → 不要盲目自动接受</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="9-自动化与脚本集成"><a href="#9-自动化与脚本集成" class="headerlink" title="9. 自动化与脚本集成"></a>9. 自动化与脚本集成</h2><p>Claude Code 的 <code>-p</code> / <code>--print</code> 模式适合 CI、脚本、批处理。</p>
+<h3 id="一次性分析"><a href="#一次性分析" class="headerlink" title="一次性分析"></a>一次性分析</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">claude -p <span class="string">&quot;分析这个仓库的主要模块&quot;</span></span><br></pre></td></tr></table></figure>
+<h3 id="输出-JSON"><a href="#输出-JSON" class="headerlink" title="输出 JSON"></a>输出 JSON</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">claude -p <span class="string">&quot;找出 src 中潜在的 bug&quot;</span> --output-format json</span><br></pre></td></tr></table></figure>
+<h3 id="限制工具"><a href="#限制工具" class="headerlink" title="限制工具"></a>限制工具</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">claude -p <span class="string">&quot;只读分析这个项目的架构&quot;</span> --allowedTools Read Grep Glob</span><br></pre></td></tr></table></figure>
+<h3 id="限制轮数"><a href="#限制轮数" class="headerlink" title="限制轮数"></a>限制轮数</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">claude -p <span class="string">&quot;尝试修复测试失败&quot;</span> --max-turns 5</span><br></pre></td></tr></table></figure>
+<h3 id="指定模型"><a href="#指定模型" class="headerlink" title="指定模型"></a>指定模型</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">claude -p <span class="string">&quot;审查这个复杂重构方案&quot;</span> --model opus</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="10-推荐日常工作流"><a href="#10-推荐日常工作流" class="headerlink" title="10. 推荐日常工作流"></a>10. 推荐日常工作流</h2><h3 id="新项目第一次使用"><a href="#新项目第一次使用" class="headerlink" title="新项目第一次使用"></a>新项目第一次使用</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/init</span><br><span class="line">/status</span><br><span class="line">/context</span><br></pre></td></tr></table></figure>
+<p>然后让 Claude：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">阅读项目结构，找出构建、测试、lint、启动命令，并总结开发约定。</span><br></pre></td></tr></table></figure>
+<h3 id="修改代码前"><a href="#修改代码前" class="headerlink" title="修改代码前"></a>修改代码前</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/plan</span><br></pre></td></tr></table></figure>
+<p>然后输入：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">请先分析现有实现，找 3 个相似模式，再给出最小改动方案，不要直接修改文件。</span><br></pre></td></tr></table></figure>
+<h3 id="修改代码后"><a href="#修改代码后" class="headerlink" title="修改代码后"></a>修改代码后</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/diff</span><br></pre></td></tr></table></figure>
+<p>然后运行：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">! npm test</span><br><span class="line">! npm run lint</span><br></pre></td></tr></table></figure>
+<p>或对应项目测试命令。</p>
+<h3 id="长会话维护"><a href="#长会话维护" class="headerlink" title="长会话维护"></a>长会话维护</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/context</span><br><span class="line">/compact</span><br></pre></td></tr></table></figure>
+<p>推荐在上下文超过 70%~80% 时压缩。</p>
+<h3 id="提交前检查"><a href="#提交前检查" class="headerlink" title="提交前检查"></a>提交前检查</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/diff</span><br><span class="line">/security-review</span><br><span class="line">/simplify</span><br></pre></td></tr></table></figure>
+<p>然后：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">! git status</span><br><span class="line">! npm test</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="11-高频命令速记版"><a href="#11-高频命令速记版" class="headerlink" title="11. 高频命令速记版"></a>11. 高频命令速记版</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">/help             查看命令</span><br><span class="line">/clear            清空上下文</span><br><span class="line">/compact          压缩上下文</span><br><span class="line">/context          查看上下文占用</span><br><span class="line">/model            切换模型</span><br><span class="line">/status           查看状态</span><br><span class="line">/usage            查看额度</span><br><span class="line">/init             初始化项目 CLAUDE.md</span><br><span class="line">/memory           管理项目记忆</span><br><span class="line">/plan             计划模式</span><br><span class="line">/diff             查看改动</span><br><span class="line">/rewind           回滚</span><br><span class="line">/resume           恢复会话</span><br><span class="line">/fork             分叉会话</span><br><span class="line">/permissions      管理权限</span><br><span class="line">/agents           管理子代理</span><br><span class="line">/hooks            管理 hooks</span><br><span class="line">/doctor           环境诊断</span><br><span class="line">/security-review  安全审查</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="12-我建议优先掌握的-10-个"><a href="#12-我建议优先掌握的-10-个" class="headerlink" title="12. 我建议优先掌握的 10 个"></a>12. 我建议优先掌握的 10 个</h2><p>如果只记 10 个，建议记这些：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/help</span><br><span class="line">/clear</span><br><span class="line">/compact</span><br><span class="line">/context</span><br><span class="line">/model</span><br><span class="line">/init</span><br><span class="line">/plan</span><br><span class="line">/diff</span><br><span class="line">/rewind</span><br><span class="line">/resume</span><br></pre></td></tr></table></figure>
+<p>再加 3 个输入技巧：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@文件路径</span><br><span class="line">!shell命令</span><br><span class="line">Shift+Tab</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="参考来源"><a href="#参考来源" class="headerlink" title="参考来源"></a>参考来源</h2><ul>
+<li>Tavily 搜索结果：Claude Code CLI / slash commands 2026 相关资料</li>
+<li><a target="_blank" rel="noopener" href="https://timdietrich.me/blog/claude-code-commands-guide">https://timdietrich.me/blog/claude-code-commands-guide</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.heyuan110.com/posts/ai/2026-03-05-claude-code-slash-commands">https://www.heyuan110.com/posts/ai/2026-03-05-claude-code-slash-commands</a></li>
+<li><a target="_blank" rel="noopener" href="https://angelo-lima.fr/en/claude-code-cheatsheet-2026-update">https://angelo-lima.fr/en/claude-code-cheatsheet-2026-update</a></li>
+</ul>
+<blockquote>
+<p>最终以本机 <code>/help</code>、<code>claude --help</code> 和官方文档为准，因为 Claude Code 的命令和快捷键更新频率较高。</p>
+</blockquote>
+
+    </div>
+  </div>
+
+  
+    
+  <div class="sea-prev-next-wrapper">
+    
+    
+      <div class="next">
+        <a class="link" href="/2026/04/13/one-years/">
+          和晴天的四月
+        </a>
+        <svg t="1725418993065" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6832" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M731.733333 480l-384-341.333333c-17.066667-14.933333-44.8-14.933333-59.733333 4.266666-14.933333 17.066667-14.933333 44.8 4.266667 59.733334L640 512 292.266667 821.333333c-17.066667 14.933333-19.2 42.666667-4.266667 59.733334 8.533333 8.533333 19.2 14.933333 32 14.933333 10.666667 0 19.2-4.266667 27.733333-10.666667l384-341.333333c8.533333-8.533333 14.933333-19.2 14.933334-32s-4.266667-23.466667-14.933334-32z" p-id="6833"></path></svg>
+      </div>
+    
+  </div>
+
+  
+</article>
+
+
+
+<script defer>
+  document.addEventListener('DOMContentLoaded', function () {
+    const toggleIcon = document.querySelector('.sea-article-catalog-title .sea-svg-icon');
+    const tocContent = document.querySelector('.sea-article-catalog > .toc');
+    if (toggleIcon && tocContent) {
+      toggleIcon.addEventListener('click', function () {
+        tocContent.classList.toggle('sea-article-catalog-show');
+        toggleIcon.classList.toggle('sea-svg-icon-rotate');
+      });
+    }
+  });
+</script>
+
+  </main>
+  <footer id="sea-footer-container">
+  <div class="sea-footer-row">
+    <div class="sea-footer-menu-link">
+      
+    </div>
+  </div>
+  
+  
+  
+  <div class="sea-footer-row">
+    <div class="sea-footer-copyright">
+      <span>©</span>
+      
+        2026
+      
+      <span>·</span>
+      Romtance
+    </div>
+    <span class="split-line">|</span>
+    <div class="sea-footer-theme-by">
+      Theme by <a class="theme" href="https://github.com/hai-zou/hexo-theme-sea" target="_blank">Sea</a>
+    </div>
+  </div>
+</footer>
+
+  
+
+
+
+
+
+<script src="/js/main.js" defer></script>
+
+
+<script src="/js/theme.js" defer></script>
+
+
+</body>
+</html>
