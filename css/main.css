@@ -1456,9 +1456,127 @@ html[theme=dark] .token.inserted {
   letter-spacing: 0.5px;
 }
 
+.sea-clock-time {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--sea-color-text-2);
+  font-variant-numeric: tabular-nums;
+}
+
 @media (max-width: 640px) {
   .sea-clocks {
     flex-direction: column;
+  }
+}
+
+#galactic-intro {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 99999;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(80, 120, 255, 0.18), transparent 32%),
+    radial-gradient(circle at 50% 52%, rgba(255, 40, 160, 0.16), transparent 40%),
+    #000;
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 0.8s ease,
+    visibility 0.8s ease;
+}
+
+#galactic-intro::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  background:
+    radial-gradient(circle at center, transparent 0, rgba(0, 0, 0, 0.16) 42%, rgba(0, 0, 0, 0.72) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.18), transparent 35%, rgba(0, 0, 0, 0.28));
+  pointer-events: none;
+}
+
+#galactic-intro.is-closing {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+#galactic-shader {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+#galactic-shader canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.galactic-intro-content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.galactic-intro-title {
+  margin: 0;
+  padding: 0 1.5rem;
+  color: #fff;
+  font-size: clamp(2.5rem, 8vw, 7rem);
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  letter-spacing: -0.04em;
+  text-shadow:
+    0 0 16px rgba(255, 255, 255, 0.55),
+    0 0 42px rgba(100, 180, 255, 0.4),
+    0 0 70px rgba(255, 40, 180, 0.28);
+  animation: galactic-title-in 0.9s ease both;
+}
+
+body.galactic-intro-active {
+  overflow: hidden !important;
+}
+
+@keyframes galactic-title-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+    filter: blur(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #galactic-intro {
+    transition-duration: 0.2s;
+  }
+
+  .galactic-intro-title {
+    animation: none;
   }
 }
 

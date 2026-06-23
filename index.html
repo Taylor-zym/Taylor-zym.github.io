@@ -42,6 +42,15 @@
 
 </head>
 <body>
+  
+  <div id="galactic-intro" aria-hidden="true">
+    <div id="galactic-shader"></div>
+    <div class="galactic-intro-content">
+      <h1 class="galactic-intro-title">晴天会的</h1>
+    </div>
+  </div>
+  
+
   <header class="sea-header">
     <nav class="sea-nav-wrap">
   <div class="sea-nav-logo" title="">
@@ -415,6 +424,7 @@
       <circle cx="100" cy="100" r="4" fill="var(--sea-color-primary)"/>
     </svg>
     <div class="sea-clock-label">Beijing</div>
+    <div class="sea-clock-time" id="sea-clock-time-bj"></div>
   </div>
 
   <div class="sea-clock-face">
@@ -684,6 +694,7 @@
       <circle cx="100" cy="100" r="4" fill="var(--sea-color-primary)"/>
     </svg>
     <div class="sea-clock-label">New York</div>
+    <div class="sea-clock-time" id="sea-clock-time-ny"></div>
   </div>
 </div>
 
@@ -704,7 +715,8 @@ document.addEventListener('DOMContentLoaded', function() {
       if (parts[i].type !== 'literal') p[parts[i].type] = parts[i].value;
     }
 
-    var h = parseInt(p.hour, 10) % 12;
+    var hour24 = parseInt(p.hour, 10) % 24;
+    var h = hour24 % 12;
     var m = parseInt(p.minute, 10);
     var s = parseInt(p.second, 10);
     var ms = now.getMilliseconds();
@@ -720,6 +732,13 @@ document.addEventListener('DOMContentLoaded', function() {
     if (hourEl) hourEl.style.transform = 'rotate(' + hourDeg + 'deg)';
     if (minEl) minEl.style.transform = 'rotate(' + minDeg + 'deg)';
     if (secEl) secEl.style.transform = 'rotate(' + secDeg + 'deg)';
+
+    var timeEl = document.getElementById('sea-clock-time-' + tag);
+    if (timeEl) {
+      var h12 = hour24 % 12 || 12;
+      var hh = (h12 < 10 ? '0' : '') + h12;
+      timeEl.textContent = hh + ':' + p.minute + ' ' + (hour24 < 12 ? 'AM' : 'PM');
+    }
   }
 
   function updateClocks() {
@@ -963,6 +982,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 <script src="/js/theme.js" defer></script>
+
+
+<script src="/js/galactic-intro.js" defer></script>
 
 
 </body>
