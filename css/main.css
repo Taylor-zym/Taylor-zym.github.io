@@ -1480,14 +1480,16 @@ html[theme=dark] .token.inserted {
   height: 100%;
   overflow: hidden;
   background:
-    radial-gradient(circle at 50% 48%, rgba(80, 120, 255, 0.18), transparent 32%),
-    radial-gradient(circle at 50% 52%, rgba(255, 40, 160, 0.16), transparent 40%),
-    #000;
+    radial-gradient(circle at 50% 48%, rgba(40, 125, 255, 0.22), transparent 32%),
+    radial-gradient(circle at 50% 52%, rgba(0, 205, 255, 0.16), transparent 40%),
+    #010817;
   opacity: 1;
   visibility: visible;
+  transform: scale(1);
   transition:
-    opacity 0.8s ease,
-    visibility 0.8s ease;
+    opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.05s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0.95s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 #galactic-intro::after {
@@ -1499,13 +1501,14 @@ html[theme=dark] .token.inserted {
   left: 0;
   z-index: 1;
   background:
-    radial-gradient(circle at center, transparent 0, rgba(0, 0, 0, 0.16) 42%, rgba(0, 0, 0, 0.72) 100%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.18), transparent 35%, rgba(0, 0, 0, 0.28));
+    radial-gradient(circle at center, transparent 0, rgba(0, 0, 0, 0.12) 44%, rgba(0, 0, 0, 0.7) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.16), transparent 38%, rgba(0, 0, 0, 0.26));
   pointer-events: none;
 }
 
 #galactic-intro.is-closing {
   opacity: 0;
+  transform: scale(1.035);
   visibility: hidden;
   pointer-events: none;
 }
@@ -1522,6 +1525,8 @@ html[theme=dark] .token.inserted {
   display: block;
   width: 100%;
   height: 100%;
+  transform: scale(1.015);
+  image-rendering: auto;
 }
 
 .galactic-intro-content {
@@ -1545,12 +1550,12 @@ html[theme=dark] .token.inserted {
   font-weight: 600;
   line-height: 1;
   text-align: center;
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
   text-shadow:
     0 0 16px rgba(255, 255, 255, 0.55),
-    0 0 42px rgba(100, 180, 255, 0.4),
-    0 0 70px rgba(255, 40, 180, 0.28);
-  animation: galactic-title-in 0.9s ease both;
+    0 0 42px rgba(80, 190, 255, 0.46),
+    0 0 70px rgba(0, 130, 255, 0.34);
+  animation: galactic-title-in 1.25s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 body.galactic-intro-active {
@@ -1560,8 +1565,13 @@ body.galactic-intro-active {
 @keyframes galactic-title-in {
   from {
     opacity: 0;
-    transform: translateY(16px) scale(0.96);
-    filter: blur(12px);
+    transform: translateY(24px) scale(0.92);
+    filter: blur(18px);
+  }
+  62% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.015);
+    filter: blur(0);
   }
   to {
     opacity: 1;
@@ -1575,11 +1585,14 @@ body.galactic-intro-active {
     transition-duration: 0.2s;
   }
 
+  #galactic-shader canvas {
+    transform: none;
+  }
+
   .galactic-intro-title {
     animation: none;
   }
 }
-
 @media screen and (max-width: 768px) {
   :root {
     --sea-main-width: 100%;

@@ -2,9 +2,8 @@
   "use strict";
 
   var STORAGE_KEY = "herox-galactic-intro-played";
-  var INTRO_DURATION = 3000;
-  var FADE_DURATION = 800;
-  var CDN_FAILSAFE_DURATION = 8000;
+  var INTRO_DURATION = 3600;
+  var FADE_DURATION = 950;
 
   var overlay = document.getElementById("galactic-intro");
   if (!overlay) return;
@@ -32,44 +31,43 @@
 
   document.body.classList.add("galactic-intro-active");
 
-  var renderer, scene, camera, material, mesh, animId;
+  var canvas, gl, program, buffer, uniforms;
   var isClosing = false;
   var startTime = Date.now();
   var isTabHidden = document.hidden;
   var introTimer = null;
-  var failsafeTimer = null;
+  var animId = null;
 
   var shaderContainer = document.getElementById("galactic-shader");
 
-  var vertexShader =
+  var vertexShaderSource =
+    "attribute vec2 position;\n" +
     "void main() {\n" +
-    "  gl_Position = vec4(position, 1.0);\n" +
+    "  gl_Position = vec4(position, 0.0, 1.0);\n" +
     "}\n";
 
-  var fragmentShader =
+  var fragmentShaderSource =
     "precision highp float;\n" +
     "\n" +
     "uniform vec2 resolution;\n" +
     "uniform float time;\n" +
+    "uniform float introProgress;\n" +
     "\n" +
-    "vec3 getColor(float intensity) {\n" +
-    "  vec3 color1 = vec3(1.0, 0.05, 0.25);\n" +
-    "  vec3 color2 = vec3(1.0, 0.4, 0.0);\n" +
-    "  vec3 color3 = vec3(1.0, 1.0, 0.0);\n" +
-    "  vec3 color4 = vec3(0.1, 1.0, 0.1);\n" +
-    "  vec3 color5 = vec3(0.2, 0.5, 1.0);\n" +
-    "  vec3 color6 = vec3(0.7, 0.0, 1.0);\n" +
-    "  vec3 color7 = vec3(1.0, 0.0, 0.7);\n" +
+    "float hash(vec2 p) {\n" +
+    "  p = fract(p * vec2(123.34, 456.21));\n" +
+    "  p += dot(p, p + 45.32);\n" +
+    "  return fract(p.x * p.y);\n" +
+    "}\n" +
     "\n" +
-    "  vec3 finalColor = color1;\n" +
-    "  finalColor = mix(finalColor, color2, smoothstep(0.0, 0.17, intensity));\n" +
-    "  finalColor = mix(finalColor, color3, smoothstep(0.17, 0.34, intensity));\n" +
-    "  finalColor = mix(finalColor, color4, smoothstep(0.34, 0.51, intensity));\n" +
-    "  finalColor = mix(finalColor, color5, smoothstep(0.51, 0.68, intensity));\n" +
-    "  finalColor = mix(finalColor, color6, smoothstep(0.68, 0.85, intensity));\n" +
-    "  finalColor = mix(finalColor, color7, smoothstep(0.85, 1.0, intensity));\n" +
+    "mat2 rotate2d(float a) {\n" +
+    "  float s = sin(a);\n" +
+    "  float c = cos(a);\n" +
+    "  return mat2(c, -s, s, c);\n" +
+    "}\n" +
     "\n" +
-    "  return finalColor;\n" +
+    "float softBand(float value, float center, float width) {\n" +
+    "  float d = abs(value - center);\n" +
+    "  return 1.0 - smoothstep(width, width + 0.05, d);\n" +
     "}\n" +
     "\n" +
     "void main() {\n" +
@@ -77,137 +75,186 @@
     "    (gl_FragCoord.xy * 2.0 - resolution.xy)\n" +
     "    / min(resolution.x, resolution.y);\n" +
     "\n" +
-    "  float t = time * 0.05;\n" +
-    "  float lineWidth = 0.003;\n" +
+    "  float progress = smoothstep(0.0, 1.0, introProgress);\n" +
+    "  float t = time * 0.32;\n" +
+    "  uv *= 1.08 - progress * 0.1;\n" +
+    "  uv = rotate2d(0.08 * sin(t * 0.8)) * uv;\n" +
     "\n" +
     "  float radius = length(uv);\n" +
     "  float angle = atan(uv.y, uv.x);\n" +
-    "  float totalIntensity = 0.0;\n" +
+    "  float falloff = smoothstep(1.55, 0.04, radius);\n" +
+    "  float core = exp(-radius * 3.8);\n" +
+    "  float arms = 0.0;\n" +
     "\n" +
-    "  for (int i = 0; i < 5; i++) {\n" +
-    "    float spiralPattern = radius * 2.0 + angle * 0.5;\n" +
-    "\n" +
-    "    float denominator = abs(\n" +
-    "      fract(t + float(i) * 0.02) * 5.0\n" +
-    "      - spiralPattern\n" +
-    "      + mod(uv.x + uv.y, 0.2)\n" +
-    "    );\n" +
-    "\n" +
-    "    denominator = max(denominator, 0.0001);\n" +
-    "\n" +
-    "    totalIntensity +=\n" +
-    "      lineWidth * float(i * i) / denominator;\n" +
+    "  for (int i = 0; i < 4; i++) {\n" +
+    "    float fi = float(i);\n" +
+    "    float phase = fi * 1.57 + t * (0.72 + fi * 0.05);\n" +
+    "    float spiral = sin(angle * 3.0 + radius * (7.2 + fi * 0.9) - phase);\n" +
+    "    float band = softBand(spiral, 0.76, 0.1 + radius * 0.025);\n" +
+    "    arms += band * (1.0 - radius * 0.38);\n" +
     "  }\n" +
     "\n" +
-    "  vec3 finalColor = getColor(\n" +
-    "    fract(totalIntensity * 0.25 + t * 0.1)\n" +
-    "  );\n" +
+    "  arms = max(arms, 0.0) * falloff;\n" +
     "\n" +
-    "  gl_FragColor = vec4(\n" +
-    "    finalColor * totalIntensity,\n" +
-    "    1.0\n" +
-    "  );\n" +
+    "  vec2 dustUv = uv * 86.0 + vec2(t * 4.0, -t * 3.0);\n" +
+    "  vec2 dustCell = floor(dustUv);\n" +
+    "  vec2 dustLocal = fract(dustUv) - 0.5;\n" +
+    "  float dustSeed = hash(dustCell);\n" +
+    "  float dust = smoothstep(0.998, 1.0, dustSeed);\n" +
+    "  dust *= smoothstep(0.28, 0.0, length(dustLocal));\n" +
+    "  dust *= 0.5 + 0.5 * sin(time * 2.4 + dustSeed * 6.28);\n" +
+    "  dust *= falloff;\n" +
+    "\n" +
+    "  vec3 deepSpace = vec3(0.005, 0.014, 0.04);\n" +
+    "  vec3 blue = vec3(0.08, 0.35, 1.0);\n" +
+    "  vec3 azure = vec3(0.0, 0.7, 1.0);\n" +
+    "  vec3 cobalt = vec3(0.18, 0.18, 0.95);\n" +
+    "  vec3 ice = vec3(0.72, 0.92, 1.0);\n" +
+    "\n" +
+    "  vec3 nebula = mix(blue, azure, smoothstep(-0.75, 0.85, sin(angle + t)));\n" +
+    "  nebula = mix(nebula, cobalt, smoothstep(0.18, 0.95, arms));\n" +
+    "  nebula = mix(nebula, ice, core * 0.72);\n" +
+    "  float glow = core * 1.25 + arms * 0.68 + dust * 1.6;\n" +
+    "  glow *= 0.12 + progress * 0.88;\n" +
+    "  glow *= 1.0 - smoothstep(1.1, 1.75, radius);\n" +
+    "\n" +
+    "  vec3 color = deepSpace + nebula * glow;\n" +
+    "  color += vec3(0.03, 0.11, 0.24) * pow(1.0 - min(radius, 1.0), 2.0);\n" +
+    "  color = pow(color, vec3(0.86));\n" +
+    "  gl_FragColor = vec4(color, 1.0);\n" +
     "}\n";
 
   function getPixelRatio() {
     var isSmallScreen = window.innerWidth <= 768;
-    var maxRatio = isSmallScreen ? 1.5 : 2;
+    var maxRatio = isSmallScreen ? 1.75 : 2.25;
     return Math.min(window.devicePixelRatio || 1, maxRatio);
   }
 
-  function initShader() {
-    if (isClosing) return;
+  function compileShader(type, source) {
+    var shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
 
-    if (typeof THREE === "undefined" || !shaderContainer) {
-      closeIntro();
-      return;
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      gl.deleteShader(shader);
+      return null;
     }
 
-    try {
-      renderer = new THREE.WebGLRenderer({
-        alpha: false,
-        antialias: false,
-        powerPreference: "high-performance",
-      });
-    } catch (e) {
-      closeIntro();
-      return;
+    return shader;
+  }
+
+  function createProgram() {
+    var vertexShader = compileShader(gl.VERTEX_SHADER, vertexShaderSource);
+    var fragmentShader = compileShader(gl.FRAGMENT_SHADER, fragmentShaderSource);
+
+    if (!vertexShader || !fragmentShader) return null;
+
+    var nextProgram = gl.createProgram();
+    gl.attachShader(nextProgram, vertexShader);
+    gl.attachShader(nextProgram, fragmentShader);
+    gl.linkProgram(nextProgram);
+    gl.deleteShader(vertexShader);
+    gl.deleteShader(fragmentShader);
+
+    if (!gl.getProgramParameter(nextProgram, gl.LINK_STATUS)) {
+      gl.deleteProgram(nextProgram);
+      return null;
     }
 
-    if (!renderer || !renderer.getContext()) {
-      closeIntro();
-      return;
-    }
+    return nextProgram;
+  }
+
+  function resizeCanvas() {
+    if (!canvas || !gl) return;
 
     var pixelRatio = getPixelRatio();
-    renderer.setPixelRatio(pixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.domElement.setAttribute("aria-hidden", "true");
-    shaderContainer.appendChild(renderer.domElement);
+    var width = Math.max(1, Math.floor(window.innerWidth * pixelRatio));
+    var height = Math.max(1, Math.floor(window.innerHeight * pixelRatio));
 
-    scene = new THREE.Scene();
-    camera = new THREE.Camera();
-    camera.position.z = 1;
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width;
+      canvas.height = height;
+    }
 
-    material = new THREE.ShaderMaterial({
-      uniforms: {
-        resolution: {
-          value: new THREE.Vector2(
-            window.innerWidth * pixelRatio,
-            window.innerHeight * pixelRatio
-          ),
-        },
-        time: { value: 0.0 },
-      },
-      vertexShader: vertexShader,
-      fragmentShader: fragmentShader,
-    });
+    gl.viewport(0, 0, width, height);
+    if (uniforms && uniforms.resolution) {
+      gl.uniform2f(uniforms.resolution, width, height);
+    }
+  }
 
-    mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
-    scene.add(mesh);
-
-    try {
-      renderer.render(scene, camera);
-    } catch (e) {
+  function initShader() {
+    if (isClosing || !shaderContainer) {
       closeIntro();
       return;
     }
 
+    canvas = document.createElement("canvas");
+    canvas.setAttribute("aria-hidden", "true");
+    gl =
+      canvas.getContext("webgl", {
+        alpha: false,
+        antialias: true,
+        powerPreference: "high-performance",
+      }) ||
+      canvas.getContext("experimental-webgl", {
+        alpha: false,
+        antialias: true,
+      });
+
+    if (!gl) {
+      closeIntro();
+      return;
+    }
+
+    program = createProgram();
+    if (!program) {
+      closeIntro();
+      return;
+    }
+
+    shaderContainer.appendChild(canvas);
+    gl.useProgram(program);
+    gl.clearColor(0.008, 0.012, 0.035, 1);
+
+    buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([-1, -1, 3, -1, -1, 3]),
+      gl.STATIC_DRAW
+    );
+
+    var position = gl.getAttribLocation(program, "position");
+    gl.enableVertexAttribArray(position);
+    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+
+    uniforms = {
+      resolution: gl.getUniformLocation(program, "resolution"),
+      time: gl.getUniformLocation(program, "time"),
+      introProgress: gl.getUniformLocation(program, "introProgress"),
+    };
+
+    resizeCanvas();
     startTime = Date.now();
     animate();
     introTimer = setTimeout(closeIntro, INTRO_DURATION);
   }
 
   function animate() {
-    if (isClosing || !renderer || !material) return;
+    if (isClosing || !gl || !program) return;
 
     if (!isTabHidden) {
-      try {
-        material.uniforms.time.value =
-          (Date.now() - startTime) / 1000.0;
-        renderer.render(scene, camera);
-      } catch (e) {
-        closeIntro();
-        return;
-      }
+      var elapsed = Date.now() - startTime;
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.uniform1f(uniforms.time, elapsed / 1000.0);
+      gl.uniform1f(
+        uniforms.introProgress,
+        Math.min(elapsed / 1400, 1)
+      );
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
 
     animId = requestAnimationFrame(animate);
-  }
-
-  function onResize() {
-    if (!renderer || !material) return;
-
-    var w = window.innerWidth;
-    var h = window.innerHeight;
-    var pixelRatio = getPixelRatio();
-
-    renderer.setPixelRatio(pixelRatio);
-    renderer.setSize(w, h);
-    material.uniforms.resolution.value.set(
-      w * pixelRatio,
-      h * pixelRatio
-    );
   }
 
   function onVisibilityChange() {
@@ -223,39 +270,32 @@
       clearTimeout(introTimer);
       introTimer = null;
     }
-    if (failsafeTimer) {
-      clearTimeout(failsafeTimer);
-      failsafeTimer = null;
-    }
     if (animId) {
       cancelAnimationFrame(animId);
       animId = null;
     }
 
-    window.removeEventListener("resize", onResize);
+    window.removeEventListener("resize", resizeCanvas);
     document.removeEventListener(
       "visibilitychange",
       onVisibilityChange
     );
     document.removeEventListener("keydown", onSkipKey);
 
-    if (mesh && scene) {
-      scene.remove(mesh);
-      if (mesh.geometry) mesh.geometry.dispose();
-      mesh = null;
-    }
-    if (material) {
-      material.dispose();
-      material = null;
-    }
-    if (renderer) {
-      renderer.dispose();
-      renderer.domElement.remove();
-      renderer = null;
+    if (gl) {
+      if (buffer) gl.deleteBuffer(buffer);
+      if (program) gl.deleteProgram(program);
+      var loseContext = gl.getExtension("WEBGL_lose_context");
+      if (loseContext) loseContext.loseContext();
     }
 
-    scene = null;
-    camera = null;
+    if (canvas) canvas.remove();
+
+    canvas = null;
+    gl = null;
+    program = null;
+    buffer = null;
+    uniforms = null;
   }
 
   function closeIntro() {
@@ -272,44 +312,9 @@
     }, FADE_DURATION);
   }
 
-  window.addEventListener("resize", onResize);
+  window.addEventListener("resize", resizeCanvas);
   document.addEventListener("visibilitychange", onVisibilityChange);
   document.addEventListener("keydown", onSkipKey);
 
-  failsafeTimer = setTimeout(function () {
-    if (!renderer) closeIntro();
-  }, CDN_FAILSAFE_DURATION);
-
-  var cdnUrls = [
-    "https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js",
-    "https://unpkg.com/three@0.128.0/build/three.min.js",
-    "https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/three.js/r128/three.min.js"
-  ];
-  var cdnIndex = 0;
-
-  function loadThreeJS() {
-    if (isClosing) return;
-
-    if (cdnIndex >= cdnUrls.length) {
-      closeIntro();
-      return;
-    }
-
-    var script = document.createElement("script");
-    script.src = cdnUrls[cdnIndex];
-    script.async = true;
-
-    script.onload = function () {
-      if (!isClosing) initShader();
-    };
-
-    script.onerror = function () {
-      cdnIndex++;
-      loadThreeJS();
-    };
-
-    document.head.appendChild(script);
-  }
-
-  loadThreeJS();
+  initShader();
 })();
