@@ -2,8 +2,9 @@
   "use strict";
 
   var STORAGE_KEY = "herox-galactic-intro-played";
-  var INTRO_DURATION = 3600;
-  var FADE_DURATION = 950;
+  var INTRO_DURATION = 4000;
+  var FADE_DURATION = 1200;
+  var BLOOM_DURATION = 2000;
 
   var overlay = document.getElementById("galactic-intro");
   if (!overlay) return;
@@ -29,6 +30,22 @@
     return;
   }
 
+  if (
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
+    document.body.classList.add("galactic-intro-active");
+    sessionStorage.setItem(STORAGE_KEY, "true");
+    setTimeout(function () {
+      overlay.classList.add("is-closing");
+      setTimeout(function () {
+        overlay.remove();
+        document.body.classList.remove("galactic-intro-active");
+      }, 220);
+    }, 900);
+    return;
+  }
+
   document.body.classList.add("galactic-intro-active");
 
   var canvas, gl, program, buffer, uniforms;
@@ -46,6 +63,7 @@
     "  gl_Position = vec4(position, 0.0, 1.0);\n" +
     "}\n";
 
+  // Monochrome charcoal atmosphere — journal ink, not neon
   var fragmentShaderSource =
     "precision highp float;\n" +
     "\n" +
@@ -59,15 +77,26 @@
     "  return fract(p.x * p.y);\n" +
     "}\n" +
     "\n" +
-    "mat2 rotate2d(float a) {\n" +
-    "  float s = sin(a);\n" +
-    "  float c = cos(a);\n" +
-    "  return mat2(c, -s, s, c);\n" +
+    "float noise(vec2 p) {\n" +
+    "  vec2 i = floor(p);\n" +
+    "  vec2 f = fract(p);\n" +
+    "  float a = hash(i);\n" +
+    "  float b = hash(i + vec2(1.0, 0.0));\n" +
+    "  float c = hash(i + vec2(0.0, 1.0));\n" +
+    "  float d = hash(i + vec2(1.0, 1.0));\n" +
+    "  vec2 u = f * f * (3.0 - 2.0 * f);\n" +
+    "  return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;\n" +
     "}\n" +
     "\n" +
-    "float softBand(float value, float center, float width) {\n" +
-    "  float d = abs(value - center);\n" +
-    "  return 1.0 - smoothstep(width, width + 0.05, d);\n" +
+    "float fbm(vec2 p) {\n" +
+    "  float v = 0.0;\n" +
+    "  float a = 0.5;\n" +
+    "  for (int i = 0; i < 4; i++) {\n" +
+    "    v += a * noise(p);\n" +
+    "    p = p * 2.02 + vec2(1.4, 8.3);\n" +
+    "    a *= 0.5;\n" +
+    "  }\n" +
+    "  return v;\n" +
     "}\n" +
     "\n" +
     "void main() {\n" +
@@ -76,57 +105,60 @@
     "    / min(resolution.x, resolution.y);\n" +
     "\n" +
     "  float progress = smoothstep(0.0, 1.0, introProgress);\n" +
-    "  float t = time * 0.32;\n" +
-    "  uv *= 1.08 - progress * 0.1;\n" +
-    "  uv = rotate2d(0.08 * sin(t * 0.8)) * uv;\n" +
+    "  float t = time * 0.11;\n" +
+    "\n" +
+    "  // Almost still — editorial breath\n" +
+    "  uv *= 1.02 - progress * 0.03;\n" +
     "\n" +
     "  float radius = length(uv);\n" +
-    "  float angle = atan(uv.y, uv.x);\n" +
-    "  float falloff = smoothstep(1.55, 0.04, radius);\n" +
-    "  float core = exp(-radius * 3.8);\n" +
-    "  float arms = 0.0;\n" +
     "\n" +
-    "  for (int i = 0; i < 4; i++) {\n" +
-    "    float fi = float(i);\n" +
-    "    float phase = fi * 1.57 + t * (0.72 + fi * 0.05);\n" +
-    "    float spiral = sin(angle * 3.0 + radius * (7.2 + fi * 0.9) - phase);\n" +
-    "    float band = softBand(spiral, 0.76, 0.1 + radius * 0.025);\n" +
-    "    arms += band * (1.0 - radius * 0.38);\n" +
-    "  }\n" +
+    "  // Soft charcoal fog layers\n" +
+    "  vec2 p1 = uv * 1.15 + vec2(t * 0.07, -t * 0.05);\n" +
+    "  vec2 p2 = uv * 1.85 + vec2(-t * 0.04, t * 0.06);\n" +
+    "  float field = fbm(p1 + 0.55 * fbm(p2));\n" +
+    "  field = smoothstep(0.18, 0.92, field);\n" +
     "\n" +
-    "  arms = max(arms, 0.0) * falloff;\n" +
+    "  float core = exp(-radius * 2.2);\n" +
+    "  float mid = exp(-radius * 0.95) * 0.55;\n" +
+    "  float falloff = smoothstep(1.7, 0.15, radius);\n" +
     "\n" +
-    "  vec2 dustUv = uv * 86.0 + vec2(t * 4.0, -t * 3.0);\n" +
-    "  vec2 dustCell = floor(dustUv);\n" +
-    "  vec2 dustLocal = fract(dustUv) - 0.5;\n" +
-    "  float dustSeed = hash(dustCell);\n" +
-    "  float dust = smoothstep(0.998, 1.0, dustSeed);\n" +
-    "  dust *= smoothstep(0.28, 0.0, length(dustLocal));\n" +
-    "  dust *= 0.5 + 0.5 * sin(time * 2.4 + dustSeed * 6.28);\n" +
-    "  dust *= falloff;\n" +
+    "  // Extremely sparse cool glints\n" +
+    "  vec2 starUv = uv * 58.0 + vec2(t * 0.6, -t * 0.4);\n" +
+    "  vec2 starCell = floor(starUv);\n" +
+    "  vec2 starLocal = fract(starUv) - 0.5;\n" +
+    "  float starSeed = hash(starCell);\n" +
+    "  float stars = smoothstep(0.9978, 1.0, starSeed);\n" +
+    "  stars *= smoothstep(0.28, 0.0, length(starLocal));\n" +
+    "  stars *= 0.65 + 0.35 * sin(time * 0.7 + starSeed * 6.28);\n" +
+    "  stars *= falloff;\n" +
     "\n" +
-    "  vec3 deepSpace = vec3(0.005, 0.014, 0.04);\n" +
-    "  vec3 blue = vec3(0.08, 0.35, 1.0);\n" +
-    "  vec3 azure = vec3(0.0, 0.7, 1.0);\n" +
-    "  vec3 cobalt = vec3(0.18, 0.18, 0.95);\n" +
-    "  vec3 ice = vec3(0.72, 0.92, 1.0);\n" +
+    "  // Palette: pure charcoal / cool slate / paper white only\n" +
+    "  vec3 voidBlack = vec3(0.035, 0.035, 0.04);\n" +
+    "  vec3 slate = vec3(0.16, 0.17, 0.2);\n" +
+    "  vec3 mist = vec3(0.32, 0.33, 0.36);\n" +
+    "  vec3 paper = vec3(0.9, 0.89, 0.86);\n" +
     "\n" +
-    "  vec3 nebula = mix(blue, azure, smoothstep(-0.75, 0.85, sin(angle + t)));\n" +
-    "  nebula = mix(nebula, cobalt, smoothstep(0.18, 0.95, arms));\n" +
-    "  nebula = mix(nebula, ice, core * 0.72);\n" +
-    "  float glow = core * 1.25 + arms * 0.68 + dust * 1.6;\n" +
-    "  glow *= 0.12 + progress * 0.88;\n" +
-    "  glow *= 1.0 - smoothstep(1.1, 1.75, radius);\n" +
+    "  vec3 fog = mix(slate, mist, field);\n" +
+    "  float glow = core * 0.55 + mid * field * 0.7 + stars * 0.55;\n" +
+    "  glow *= 0.22 + progress * 0.78;\n" +
+    "  glow *= falloff;\n" +
     "\n" +
-    "  vec3 color = deepSpace + nebula * glow;\n" +
-    "  color += vec3(0.03, 0.11, 0.24) * pow(1.0 - min(radius, 1.0), 2.0);\n" +
-    "  color = pow(color, vec3(0.86));\n" +
+    "  vec3 color = voidBlack;\n" +
+    "  color += fog * glow;\n" +
+    "  color += paper * core * 0.045;\n" +
+    "  color += mist * pow(max(1.0 - radius, 0.0), 2.8) * 0.06;\n" +
+    "\n" +
+    "  // Micro grain — print texture, not digital noise\n" +
+    "  float grain = (hash(gl_FragCoord.xy * 0.7 + floor(time * 8.0)) - 0.5) * 0.018;\n" +
+    "  color += grain;\n" +
+    "\n" +
+    "  color = pow(max(color, 0.0), vec3(0.95));\n" +
     "  gl_FragColor = vec4(color, 1.0);\n" +
     "}\n";
 
   function getPixelRatio() {
     var isSmallScreen = window.innerWidth <= 768;
-    var maxRatio = isSmallScreen ? 1.75 : 2.25;
+    var maxRatio = isSmallScreen ? 1.5 : 2;
     return Math.min(window.devicePixelRatio || 1, maxRatio);
   }
 
@@ -214,7 +246,7 @@
 
     shaderContainer.appendChild(canvas);
     gl.useProgram(program);
-    gl.clearColor(0.008, 0.012, 0.035, 1);
+    gl.clearColor(0.035, 0.035, 0.04, 1);
 
     buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -249,7 +281,7 @@
       gl.uniform1f(uniforms.time, elapsed / 1000.0);
       gl.uniform1f(
         uniforms.introProgress,
-        Math.min(elapsed / 1400, 1)
+        Math.min(elapsed / BLOOM_DURATION, 1)
       );
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
@@ -263,6 +295,10 @@
 
   function onSkipKey(e) {
     if (e.key === "Escape") closeIntro();
+  }
+
+  function onSkipPointer() {
+    closeIntro();
   }
 
   function destroyShader() {
@@ -281,6 +317,8 @@
       onVisibilityChange
     );
     document.removeEventListener("keydown", onSkipKey);
+    overlay.removeEventListener("click", onSkipPointer);
+    overlay.removeEventListener("touchstart", onSkipPointer);
 
     if (gl) {
       if (buffer) gl.deleteBuffer(buffer);
@@ -315,6 +353,8 @@
   window.addEventListener("resize", resizeCanvas);
   document.addEventListener("visibilitychange", onVisibilityChange);
   document.addEventListener("keydown", onSkipKey);
+  overlay.addEventListener("click", onSkipPointer);
+  overlay.addEventListener("touchstart", onSkipPointer, { passive: true });
 
   initShader();
 })();
