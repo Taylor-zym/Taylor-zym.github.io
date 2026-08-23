@@ -63,7 +63,7 @@
     "  gl_Position = vec4(position, 0.0, 1.0);\n" +
     "}\n";
 
-  // Monochrome charcoal atmosphere — journal ink, not neon
+  // Midnight editorial atmosphere — mineral blue, not neon
   var fragmentShaderSource =
     "precision highp float;\n" +
     "\n" +
@@ -112,7 +112,7 @@
     "\n" +
     "  float radius = length(uv);\n" +
     "\n" +
-    "  // Soft charcoal fog layers\n" +
+    "  // Soft mineral-blue fog layers\n" +
     "  vec2 p1 = uv * 1.15 + vec2(t * 0.07, -t * 0.05);\n" +
     "  vec2 p2 = uv * 1.85 + vec2(-t * 0.04, t * 0.06);\n" +
     "  float field = fbm(p1 + 0.55 * fbm(p2));\n" +
@@ -132,11 +132,11 @@
     "  stars *= 0.65 + 0.35 * sin(time * 0.7 + starSeed * 6.28);\n" +
     "  stars *= falloff;\n" +
     "\n" +
-    "  // Palette: pure charcoal / cool slate / paper white only\n" +
-    "  vec3 voidBlack = vec3(0.035, 0.035, 0.04);\n" +
-    "  vec3 slate = vec3(0.16, 0.17, 0.2);\n" +
-    "  vec3 mist = vec3(0.32, 0.33, 0.36);\n" +
-    "  vec3 paper = vec3(0.9, 0.89, 0.86);\n" +
+    "  // Palette: midnight ink / mineral slate / glacial blue\n" +
+    "  vec3 voidBlack = vec3(0.012, 0.024, 0.052);\n" +
+    "  vec3 slate = vec3(0.065, 0.16, 0.28);\n" +
+    "  vec3 mist = vec3(0.24, 0.46, 0.62);\n" +
+    "  vec3 paper = vec3(0.82, 0.94, 1.0);\n" +
     "\n" +
     "  vec3 fog = mix(slate, mist, field);\n" +
     "  float glow = core * 0.55 + mid * field * 0.7 + stars * 0.55;\n" +
@@ -145,14 +145,14 @@
     "\n" +
     "  vec3 color = voidBlack;\n" +
     "  color += fog * glow;\n" +
-    "  color += paper * core * 0.045;\n" +
-    "  color += mist * pow(max(1.0 - radius, 0.0), 2.8) * 0.06;\n" +
+    "  color += paper * core * 0.055;\n" +
+    "  color += mist * pow(max(1.0 - radius, 0.0), 2.8) * 0.075;\n" +
     "\n" +
     "  // Micro grain — print texture, not digital noise\n" +
     "  float grain = (hash(gl_FragCoord.xy * 0.7 + floor(time * 8.0)) - 0.5) * 0.018;\n" +
     "  color += grain;\n" +
     "\n" +
-    "  color = pow(max(color, 0.0), vec3(0.95));\n" +
+    "  color = pow(max(color, 0.0), vec3(0.92));\n" +
     "  gl_FragColor = vec4(color, 1.0);\n" +
     "}\n";
 
@@ -246,7 +246,7 @@
 
     shaderContainer.appendChild(canvas);
     gl.useProgram(program);
-    gl.clearColor(0.035, 0.035, 0.04, 1);
+    gl.clearColor(0.012, 0.024, 0.052, 1);
 
     buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
